@@ -131,5 +131,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-GDAL_LIBRARY_PATH=r"C:/Program Files/PostgreSQL/15/bin/libgdal-35.dll"
-GEOS_LIBRARY_PATH = r"C:/Program Files/PostgreSQL/15/bin/libgeos_c.dll"
+# GDAL_LIBRARY_PATH=r"C:/Program Files/PostgreSQL/15/bin/libgdal-35.dll"
+# GEOS_LIBRARY_PATH = r"C:/Program Files/PostgreSQL/15/bin/libgeos_c.dll"
