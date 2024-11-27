@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^ryl&31q)pmrkujiov-+t9t-wb(s)&-i6s!iv-h1riz2@6znai
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['139.84.234.168','192.168.1.66']
+ALLOWED_HOSTS = ['139.84.234.168','192.168.1.66','localhost']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     'rest_framework',
     "corsheaders",
+    "leaflet",
     'users',
 ]
 
@@ -132,5 +133,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# GDAL_LIBRARY_PATH=r"C:/Program Files/PostgreSQL/15/bin/libgdal-35.dll"
-# GEOS_LIBRARY_PATH = r"C:/Program Files/PostgreSQL/15/bin/libgeos_c.dll"
+GDAL_LIBRARY_PATH=r"C:/Program Files/PostgreSQL/15/bin/libgdal-35.dll"
+GEOS_LIBRARY_PATH = r"C:/Program Files/PostgreSQL/15/bin/libgeos_c.dll"
