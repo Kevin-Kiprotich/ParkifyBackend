@@ -2,15 +2,15 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.core.serializers import serialize
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Parks
+from .models import Parks,ParkingSlots
 # Create your views here.
 
 class getParks(APIView):
     def get(self, request):
-        queryset = Parks.objects.all()
-        data = serialize('geojson', queryset, geometry_field = 'mpoly', fields = ('id', 'name', 'capacity', 'available_spaces',))
+        queryset = ParkingSlots.objects.all()
+        data = serialize('geojson', queryset, geometry_field = 'geometry', fields = ('id', 'name','slot_no','is_parked',))
         response = {
-            "parks":data,
+            "slots":data,
         }
 
         return Response(response)
@@ -18,34 +18,30 @@ class getParks(APIView):
 
 class bookPark(APIView):
     def post(self, request):
-        parkid = request.data.get('id')
-        print(parkid)
+        slotID = request.data.get('id')
+        
         try:
-            park= Parks.objects.get(id=parkid)
-            if park.available_spaces - 1 <=0:
-                raise Parks.DoesNotExist
+            slot= ParkingSlots.objects.get(id=slotID)
+            if slot.is_parked:
+                return HttpResponseBadRequest(JsonResponse({'message':f"{slot.id} is already taken"}))
             else:
-                park.available_spaces -= 1
-                if park.booked > park.capacity:
-                    raise Parks.DoesNotExist
-                park.booked += 1
-                park.save()
-            return Response({'message':'Parking booked successfully.'})
-        except Parks.DoesNotExist:
-            return HttpResponseBadRequest(JsonResponse({'message':f'No park with id:{parkid}'}))
+                slot.is_parked = True
+                slot.save()
+                return Response({'message':'Parking booked successfully.'})
+        except ParkingSlots.DoesNotExist:
+            return HttpResponseBadRequest(JsonResponse({'message':f'No parking slot with id:{slotID}'}))
         
 
 class freePark(APIView):
     def post(self, request):
-        parkid = request.data.get('id')
+        slotID = request.data.get('id')
 
         try:
-            park= Parks.objects.get(id=parkid)
-            park.booked -= 1
-            park.available_spaces += 1
-            park.save()
+            slot= ParkingSlots.objects.get(id=slotID)
+            slot.is_parked = False
+            slot.save()
             return Response({'message':'Parking booked successfully.'})
         except Parks.DoesNotExist:
-            return HttpResponseBadRequest(JsonResponse({'message':f'No park with id:{parkid}'}))
+            return HttpResponseBadRequest(JsonResponse({'message':f'No parking slot with id:{slotID}'}))
 
 
